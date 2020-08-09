@@ -56,7 +56,7 @@ export class Meetings {
         throw new Error('Getting meeting list failed with an error code 404');
       }
 
-      logger().error('Unexpecetd behavior', response);
+      logger().error('Unexpecetd behavior', response.data);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -90,7 +90,7 @@ export class Meetings {
         throw new Error('Meeting creations failed with an error code 404');
       }
 
-      logger().error('Unexpected bahavior', response);
+      logger().error('Unexpected bahavior', response.data);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -124,7 +124,7 @@ export class Meetings {
         throw new Error('Meeting not found or \n User not exist or \n meeting is not found or has expired');
       }
 
-      logger().error('Unexpected bahavior', response);
+      logger().error('Unexpected bahavior', response.data);
       throw new Error('Unexpected Behavior');
     } catch (error) {
       throw error;
@@ -142,7 +142,7 @@ export class Meetings {
       const response = await this.http.patch<string>(`/meetings/${params.meetingId}`, {
         ...params.bodyParams,
         params: {
-          occurrence_id: params.queryParams?.occurrence_id,
+          occurrence_id: params.queryParams && params.queryParams.occurrence_id ? params.queryParams.occurrence_id : '',
         },
       });
 
@@ -166,7 +166,7 @@ export class Meetings {
         throw new Error('Update failde with status code 404');
       }
 
-      logger().error('Unexpected behavior', response);
+      logger().error('Unexpected behavior', response.data);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -187,17 +187,21 @@ export class Meetings {
       });
 
       if (response.status === 204) {
+        logger().info('Update meeting status success', response.data);
         return response.data;
       }
 
       if (response.status === 400) {
+        logger().error('Update meeting status failed with an errer code 400', response.data);
         throw new Error('Meeting status update failed with error code 400');
       }
 
       if (response.status === 404) {
+        logger().error('Update meeting satus failed with ane error code 404', response.data);
         throw new Error('Meeting status update failde with errer code 404');
       }
 
+      logger().error('Unexpected Behavior', response.data);
       throw new Error('Unexpected Behavior!');
     } catch (error) {
       throw error;
@@ -233,7 +237,7 @@ export class Meetings {
         throw new Error('Meeting Deletion failed with an error code 404');
       }
 
-      logger().error('Unexpected behavior', response);
+      logger().error('Unexpected behavior', response.data);
       throw new Error('Unexpected Behavior!');
     } catch (error) {
       throw error;

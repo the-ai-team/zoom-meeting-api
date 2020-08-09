@@ -1,8 +1,9 @@
 {
-  "name": "zoom-meeting-api",
+  "name": "@0xait/zoom-meeting-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API implementation for zoom meetings",
   "main": "index.js",
+  "types": "index.d.ts",
   "files": [
     "lib/**/*"
   ],
@@ -16,9 +17,22 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-ai-team/zoom-meeting-api.git"
+  },
+  "keywords": [
+    "zoom",
+    "meeting",
+    "api",
+    "zoom meeting api"
+  ],
   "author": "Nadun Yashmika",
   "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.0",
     "prettier": "^2.0.5",

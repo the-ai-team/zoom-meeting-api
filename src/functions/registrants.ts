@@ -56,7 +56,7 @@ export class Registrants {
         throw new Error('Getting meeting registrants failed with an error code 404');
       }
 
-      logger().error('Unexpected Beavior', response);
+      logger().error('Unexpected Beavior', response.data);
       throw new Error('Unexpected Behavior!');
     } catch (error) {
       throw error;
@@ -96,7 +96,7 @@ export class Registrants {
         throw new Error('Meeting registrant addtion failed with an error code 404');
       }
 
-      logger().error('Unexpected Behavior', response);
+      logger().error('Unexpected Behavior', response.data);
       throw new Error('Unexpected behavior');
     } catch (error) {
       throw error;
@@ -142,7 +142,7 @@ export class Registrants {
         throw new Error('Updating Registrants statuses failed with an error code 404');
       }
 
-      logger().error('Unexpected behavior', response);
+      logger().error('Unexpected behavior', response.data);
       throw new Error('Unexpected Behavior!');
     } catch (error) {
       throw error;
