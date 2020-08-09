@@ -12,13 +12,17 @@ export class ZoomMeetingAPI {
   private zoomToken: string;
   private zoomIss: string;
 
+  /**
+   * @member {Meetings} meetingFunctions - configuerd instance of meetingFunctions
+   * @member {Registrants} registrantFunctions - configured instance of registrantFunctions
+   */
   meetingFunctions: Meetings;
   registrantFunctions: Registrants;
 
   /**
    * Create a zoom jwt app and get your credentials
    * @param {string} APISectret - zoom api secret
-   * @param { string} apiKey - zoom api key
+   * @param {string} apiKey - zoom api key
    * @param {number} logLevel - value should be from 0-4
    *                        0 - no logs
    *                        1 - errors only
