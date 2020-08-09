@@ -4,6 +4,9 @@ import { Meetings } from './functions/meetings';
 import { Registrants } from './functions/registrants';
 import { logger } from './utils/logger';
 
+/**
+ * Zoom Meeting Api
+ */
 export class ZoomMeetingAPI {
   private _axiosInstance?: AxiosInstance;
   private zoomToken: string;
@@ -12,9 +15,20 @@ export class ZoomMeetingAPI {
   meetingFunctions: Meetings;
   registrantFunctions: Registrants;
 
-  constructor(zoomToken: string, zoomIss: string, logLevel = 0) {
-    this.zoomIss = zoomIss;
-    this.zoomToken = zoomToken;
+  /**
+   * Create a zoom jwt app and get your credentials
+   * @param {string} APISectret - zoom api secret
+   * @param { string} apiKey - zoom api key
+   * @param {number} logLevel - value should be from 0-4
+   *                        0 - no logs
+   *                        1 - errors only
+   *                        2 - warnings and errors only
+   *                        3 - warnings, errors and debug only
+   *                        4 - all logs
+   */
+  constructor(APISectret: string, apiKey: string, logLevel = 0) {
+    this.zoomIss = apiKey;
+    this.zoomToken = APISectret;
 
     this.meetingFunctions = new Meetings(this.http);
     this.registrantFunctions = new Registrants(this.http);
