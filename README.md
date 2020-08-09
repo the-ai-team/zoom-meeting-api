@@ -9,7 +9,7 @@ Functionalities
 - Get a meeting
 - Update meeting
 - Update meeting status
-- Delte meeting
+- Delete meeting
 
 - Get meeting registrants list
 - Add meeting registrant
@@ -21,7 +21,7 @@ Functionalities
 
 ## Usage
 
-[Visit the documentan](http://the-ai-team.github.io/docs)
+[Visit the documentan](https://the-ai-team.github.io/zoom-meeting-api/docs)
 
 ## License
 
