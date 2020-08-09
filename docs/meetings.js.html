@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: meetings.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: meetings.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Meetings = void 0;
+const constants_1 = require("../interfaces/constants");
+const logger_1 = require("../utils/logger");
+/**
+ * Class for creating, reading, updating and deleting zoom meetings
+ */
+class Meetings {
+    /**
+     * Create a Meeting Instance
+     * @param {AxiosInstance} http - axios instance to handle requests with zoom api
+     */
+    constructor(http) {
+        this.http = http;
+    }
+    /**
+     * @async Get meeting list
+     * @param {GetListMeetingsParams} params - parameters requires to get a list of meetings
+     * @return {Promise&lt;GetListMeetingsResponse>} - returns a meeting list or throwes an error
+     */
+    async getListMeetings(params) {
+        try {
+            if ((!!params.pageSize &amp;&amp; params.pageSize > 300) || (params.pageSize &amp;&amp; params.pageSize &lt; 1)) {
+                logger_1.logger().error('Page size should be between 1 - 300');
+                throw new Error('Keep your page size parameter between 1 - 300');
+            }
+            logger_1.logger().debug('Getting meeting list', params);
+            const response = await this.http.get(`/users/${params.userId}/meetings`, {
+                params: {
+                    type: params.type ? params.type : constants_1.GetMeetingTypes.Live,
+                    page_size: params.pageSize ? params.pageSize : 30,
+                    next_page_token: params.nextPageToken,
+                    page_number: params.pageNumber,
+                },
+            });
+            if (response.status === 200) {
+                logger_1.logger().info('Get list meeting response', response.data);
+                return response.data;
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('Getting meeting list faild with an error code 404', response.data);
+                throw new Error('Getting meeting list failed with an error code 404');
+            }
+            logger_1.logger().error('Unexpecetd behavior', response.data);
+            throw new Error('Unexpected behavior!');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * @async Create meeting
+     * @param {CreateMeetingParams} params - params requires to create a meeting
+     * @returns {promise&lt;CreateMeetingResponse>} - returns the created meeting object or throws an error
+     */
+    async createMeeting(params) {
+        try {
+            logger_1.logger().debug('Creating meeting', params);
+            const response = await this.http.post(`/users/${params.hostId}/meetings`, {
+                ...params.bodyParams,
+            });
+            if (response.status === 201) {
+                logger_1.logger().info('Create meeting respnose', response.data);
+                return response.data;
+            }
+            if (response.status === 300) {
+                logger_1.logger().error('Meeting creation failed with an error code 300', response.data);
+                throw new Error('Meeting creation failed with an error code 300');
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('Meeting creation failed with an error code 404', response.data);
+                throw new Error('Meeting creations failed with an error code 404');
+            }
+            logger_1.logger().error('Unexpected bahavior', response.data);
+            throw new Error('Unexpected behavior!');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * @async Get specific meeting
+     * @param {GetMeetingParams} params - params requires to get a meeting
+     * @returns {promise&lt;GetMeetingResponse>} - returns the requested meeting or throws an error
+     */
+    async getMeeting(params) {
+        try {
+            logger_1.logger().debug('Getting a meeting', params);
+            const response = await this.http.get(`/meetings/${params.meetingId}`, {
+                params: { occurrence_id: params.occurrence_id, show_previous_occurrences: params.show_previous_occurrences },
+            });
+            if (response.status === 200) {
+                logger_1.logger().info('Meeting getting success', response.data);
+                return response.data;
+            }
+            if (response.status === 400) {
+                logger_1.logger().error('Getting meeting failed with an error code  400', response.data);
+                throw new Error('Getting user failed with an error code  400');
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('Getting meeting failed with an error code 404', response.data);
+                throw new Error('Meeting not found or \n User not exist or \n meeting is not found or has expired');
+            }
+            logger_1.logger().error('Unexpected bahavior', response.data);
+            throw new Error('Unexpected Behavior');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * @async Update meeting
+     * @param {UpdateMeetingParams} params - params requires to update a meeting
+     * @returns {promise&lt;string>} - returns a message of success or throws an error
+     */
+    async updateMeeting(params) {
+        try {
+            logger_1.logger().debug('Updating meeting', params);
+            const response = await this.http.patch(`/meetings/${params.meetingId}`, {
+                ...params.bodyParams,
+                params: {
+                    occurrence_id: params.queryParams &amp;&amp; params.queryParams.occurrence_id ? params.queryParams.occurrence_id : '',
+                },
+            });
+            if (response.status === 204) {
+                logger_1.logger().info('Updating meeting success', response.data);
+                return response.data;
+            }
+            if (response.status === 300) {
+                logger_1.logger().error('Meeting updation faild with an error code 300', response.data);
+                throw new Error('Update failde with status code 300');
+            }
+            if (response.status === 400) {
+                logger_1.logger().error('Meeting updation failid with an error code 400');
+                throw new Error('Update failed with status code 400');
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('meeting updation failed with an error code 404', response.data);
+                throw new Error('Update failde with status code 404');
+            }
+            logger_1.logger().error('Unexpected behavior', response.data);
+            throw new Error('Unexpected behavior!');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * @async Updates Meeting Status
+     * @param {number} meetingId - the meeting id of the meeting to be updated
+     * @param {string} action - action of the meeting status
+     * @returns {promise&lt;string>} - returns an success message or throws an error
+     */
+    async updateMeetingStatus(meetingId, action = 'end') {
+        try {
+            logger_1.logger().info('Updating meeting status', meetingId, action);
+            const response = await this.http.put(`/meetings/${meetingId}/status`, {
+                action,
+            });
+            if (response.status === 204) {
+                logger_1.logger().info('Update meeting status success', response.data);
+                return response.data;
+            }
+            if (response.status === 400) {
+                logger_1.logger().error('Update meeting status failed with an errer code 400', response.data);
+                throw new Error('Meeting status update failed with error code 400');
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('Update meeting satus failed with ane error code 404', response.data);
+                throw new Error('Meeting status update failde with errer code 404');
+            }
+            logger_1.logger().error('Unexpected Behavior', response.data);
+            throw new Error('Unexpected Behavior!');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    /**
+     * @async Delete a meeting
+     * @param {number} meetingId - the id of the meeting to be deleted
+     * @param {string} occurrenceId
+     * @param {boolean} scheduleForReminder
+     * @returns {promise&lt;string>} - returns a success message or throws an error
+     */
+    async deleteMeeting(meetingId, occurrenceId, scheduleForReminder) {
+        try {
+            logger_1.logger().debug('Deleting a meeting', meetingId, occurrenceId, scheduleForReminder);
+            const response = await this.http.delete(`/meetings/${meetingId}`, {
+                params: { occurrence_id: occurrenceId, schedule_for_reminder: scheduleForReminder },
+            });
+            if (response.status === 204) {
+                logger_1.logger().info('Meeting deletion successful', response.data);
+                return response.data;
+            }
+            if (response.status === 400) {
+                logger_1.logger().error('Meeting deletion failed with an error code 400', response.data);
+                throw new Error('Meeting Deletion failed with an errer code 400');
+            }
+            if (response.status === 404) {
+                logger_1.logger().error('Meeting deletion failed with an error code 404', response.data);
+                throw new Error('Meeting Deletion failed with an error code 404');
+            }
+            logger_1.logger().error('Unexpected behavior', response.data);
+            throw new Error('Unexpected Behavior!');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+}
+exports.Meetings = Meetings;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Meetings.html">Meetings</a></li><li><a href="Registrants.html">Registrants</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Sun Aug 09 2020 14:53:43 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
