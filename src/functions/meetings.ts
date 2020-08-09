@@ -8,6 +8,7 @@ import {
 import { CreateMeetingResponse, GetListMeetingsResponse } from '../interfaces/responses';
 import { GetMeetingTypes } from '../interfaces/constants';
 import { GetMeetingResponse } from '../interfaces/responses/get-meeting';
+import { logger } from '../utils/logger';
 
 /**
  * Class for creating, reading, updating and deleting zoom meetings
@@ -16,7 +17,7 @@ export class Meetings {
   private http: AxiosInstance;
 
   /**
-   * Creatte a Meeting Instance
+   * Create a Meeting Instance
    * @param {AxiosInstance} http - axios instance to handle requests with zoom api
    */
   constructor(http: AxiosInstance) {
@@ -26,14 +27,16 @@ export class Meetings {
   /**
    * @async Get meeting list
    * @param {GetListMeetingsParams} params - parameters requires to get a list of meetings
-   * @return {Promise<GetListMeetingsResponse>} - renurns a meeting list or throwes an error
+   * @return {Promise<GetListMeetingsResponse>} - returns a meeting list or throwes an error
    */
   async getListMeetings(params: GetListMeetingsParams): Promise<GetListMeetingsResponse> {
     try {
       if ((!!params.pageSize && params.pageSize > 300) || (params.pageSize && params.pageSize < 1)) {
+        logger().error('Page size should be between 1 - 300');
         throw new Error('Keep your page size parameter between 1 - 300');
       }
 
+      logger().debug('Getting meeting list', params);
       const response = await this.http.get<GetListMeetingsResponse>(`/users/${params.userId}/meetings`, {
         params: {
           type: params.type ? params.type : GetMeetingTypes.Live,
@@ -44,13 +47,16 @@ export class Meetings {
       });
 
       if (response.status === 200) {
+        logger().info('Get list meeting response', response.data);
         return response.data;
       }
 
       if (response.status === 404) {
-        throw new Error('User id not found');
+        logger().error('Getting meeting list faild with an error code 404', response.data);
+        throw new Error('Getting meeting list failed with an error code 404');
       }
 
+      logger().error('Unexpecetd behavior', response);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -64,24 +70,27 @@ export class Meetings {
    */
   async createMeeting(params: CreateMeetingParams): Promise<CreateMeetingResponse> {
     try {
+      logger().debug('Creating meeting', params);
       const response = await this.http.post<CreateMeetingResponse>(`/users/${params.hostId}/meetings`, {
         ...params.bodyParams,
       });
 
       if (response.status === 201) {
+        logger().info('Create meeting respnose', response.data);
         return response.data;
       }
 
       if (response.status === 300) {
-        throw new Error(
-          'Invalid enforce_login_domains, separate multiple domains by semicolon.\n A maximum of {rateLimitNumber} meetings can be created/updated for a single user in one day.',
-        );
+        logger().error('Meeting creation failed with an error code 300', response.data);
+        throw new Error('Meeting creation failed with an error code 300');
       }
 
       if (response.status === 404) {
-        throw new Error('User or user id not found');
+        logger().error('Meeting creation failed with an error code 404', response.data);
+        throw new Error('Meeting creations failed with an error code 404');
       }
 
+      logger().error('Unexpected bahavior', response);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -95,22 +104,27 @@ export class Meetings {
    */
   async getMeeting(params: GetMeetingParams): Promise<GetMeetingResponse> {
     try {
+      logger().debug('Getting a meeting', params);
       const response = await this.http.get<GetMeetingResponse>(`/meetings/${params.meetingId}`, {
         params: { occurrence_id: params.occurrence_id, show_previous_occurrences: params.show_previous_occurrences },
       });
 
       if (response.status === 200) {
+        logger().info('Meeting getting success', response.data);
         return response.data;
       }
 
       if (response.status === 400) {
-        throw new Error(`User not fountd on this account ${params.meetingId}, or cannot access webinar info`);
+        logger().error('Getting meeting failed with an error code  400', response.data);
+        throw new Error('Getting user failed with an error code  400');
       }
 
       if (response.status === 404) {
+        logger().error('Getting meeting failed with an error code 404', response.data);
         throw new Error('Meeting not found or \n User not exist or \n meeting is not found or has expired');
       }
 
+      logger().error('Unexpected bahavior', response);
       throw new Error('Unexpected Behavior');
     } catch (error) {
       throw error;
@@ -124,6 +138,7 @@ export class Meetings {
    */
   async updateMeeting(params: UpdateMeetingParams): Promise<string> {
     try {
+      logger().debug('Updating meeting', params);
       const response = await this.http.patch<string>(`/meetings/${params.meetingId}`, {
         ...params.bodyParams,
         params: {
@@ -132,21 +147,26 @@ export class Meetings {
       });
 
       if (response.status === 204) {
+        logger().info('Updating meeting success', response.data);
         return response.data as string;
       }
 
       if (response.status === 300) {
+        logger().error('Meeting updation faild with an error code 300', response.data);
         throw new Error('Update failde with status code 300');
       }
 
       if (response.status === 400) {
+        logger().error('Meeting updation failid with an error code 400');
         throw new Error('Update failed with status code 400');
       }
 
       if (response.status === 404) {
+        logger().error('meeting updation failed with an error code 404', response.data);
         throw new Error('Update failde with status code 404');
       }
 
+      logger().error('Unexpected behavior', response);
       throw new Error('Unexpected behavior!');
     } catch (error) {
       throw error;
@@ -161,6 +181,7 @@ export class Meetings {
    */
   async updateMeetingStatus(meetingId: number, action = 'end'): Promise<string> {
     try {
+      logger().info('Updating meeting status', meetingId, action);
       const response = await this.http.put<string>(`/meetings/${meetingId}/status`, {
         action,
       });
@@ -192,22 +213,27 @@ export class Meetings {
    */
   async deleteMeeting(meetingId: number, occurrenceId?: string, scheduleForReminder?: boolean): Promise<string> {
     try {
+      logger().debug('Deleting a meeting', meetingId, occurrenceId, scheduleForReminder);
       const response = await this.http.delete<string>(`/meetings/${meetingId}`, {
         params: { occurrence_id: occurrenceId, schedule_for_reminder: scheduleForReminder },
       });
 
       if (response.status === 204) {
+        logger().info('Meeting deletion successful', response.data);
         return response.data;
       }
 
       if (response.status === 400) {
+        logger().error('Meeting deletion failed with an error code 400', response.data);
         throw new Error('Meeting Deletion failed with an errer code 400');
       }
 
       if (response.status === 404) {
+        logger().error('Meeting deletion failed with an error code 404', response.data);
         throw new Error('Meeting Deletion failed with an error code 404');
       }
 
+      logger().error('Unexpected behavior', response);
       throw new Error('Unexpected Behavior!');
     } catch (error) {
       throw error;

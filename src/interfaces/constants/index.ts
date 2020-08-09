@@ -5,3 +5,5 @@ export * from './get-meeting-types';
 export * from './recordinp-types';
 export * from './recurrence-types';
 export * from './weeks-of-month';
+export * from './registrant-status';
+export * from './updatable-registrant-statuses';

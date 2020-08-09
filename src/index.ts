@@ -1,15 +1,25 @@
 import axios, { AxiosInstance } from 'axios';
 import * as jwt from 'jsonwebtoken';
 import { Meetings } from './functions/meetings';
+import { Registrants } from './functions/registrants';
+import { logger } from './utils/logger';
 
 export class ZoomMeetingAPI {
   private _axiosInstance?: AxiosInstance;
   private zoomToken: string;
   private zoomIss: string;
 
-  constructor(zoomToken: string, zoomIss: string) {
+  meetingFunctions: Meetings;
+  registrantFunctions: Registrants;
+
+  constructor(zoomToken: string, zoomIss: string, logLevel = 0) {
     this.zoomIss = zoomIss;
     this.zoomToken = zoomToken;
+
+    this.meetingFunctions = new Meetings(this.http);
+    this.registrantFunctions = new Registrants(this.http);
+
+    logger().setLogLevel(logLevel);
   }
 
   private get http() {
@@ -33,6 +43,4 @@ export class ZoomMeetingAPI {
 
     return this._axiosInstance;
   }
-
-  meetingFunctions = new Meetings(this.http);
 }

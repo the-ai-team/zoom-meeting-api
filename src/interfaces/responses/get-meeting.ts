@@ -1,4 +1,4 @@
-import { Meeting } from './meeting';
+import { Meeting } from '../shared/meeting';
 import { MeetingSettings } from '../shared';
 
 export interface GetMeetingResponse extends Meeting {
