@@ -5,3 +5,5 @@ export * from './update-meeting-params';
 export * from './list-meeting-registrants';
 export * from './add-meeting-registrant';
 export * from './update-registrats-status';
+export * from './get-users-list-params';
+export * from './create-user-params';

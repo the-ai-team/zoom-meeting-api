@@ -16,15 +16,19 @@ export class Registrants {
   /**
    * Create a Registrants instance
    * @param {AxiosInstance} http - axios instance to handle requests with zoom api
+   * @member getListMeetingRegistrants
+   * @member addMeetingRegistrant
+   * @member updateMeetingRegistrantsStatus
    */
   constructor(http: AxiosInstance) {
     this.http = http;
   }
 
   /**
-   * @async Get list of meeting registrants
+   * @async
+   * Get list of meeting registrants
    * @param {GetListMeetingRegistrantsParams} params - parameters requires to get a list of meeting registrants
-   * @return {Promise<GetMeetingRegistrantListResponse>} - returns a list of meeting registrants or throws an error
+   * @returns {Promise<GetMeetingRegistrantListResponse>} - returns a list of meeting registrants or throws an error
    */
   async getListMeetingRegistrants(params: GetListMeetingRegistrantsParams): Promise<GetMeetingRegistrantListResponse> {
     try {
@@ -64,9 +68,10 @@ export class Registrants {
   }
 
   /**
-   * @async Add meeting registrant
+   * @async
+   * Add meeting registrant
    * @param {AddMeetingRegistratParams} params - parameters requires to add a meeting registrat
-   * @return {Promise<AddMeetingRegistrantResponse>} - returns a meeting registrant or throws an error
+   * @returns {Promise<AddMeetingRegistrantResponse>} - returns a meeting registrant or throws an error
    */
   async addMeetingRegistrant(params: AddMeetingRegistratParams): Promise<AddMeetingRegistrantResponse> {
     try {
@@ -104,9 +109,10 @@ export class Registrants {
   }
 
   /**
-   * @async updates meeting registrants status
+   * @async
+   * updates meeting registrants status
    * @param {UpdateRegistrantStatusParams} params - parameters requires to update registrant statuses
-   * @return {Promise<string>} - returns a success message or throws an error
+   * @returns {Promise<string>} - returns a success message or throws an error
    */
   async updateMeetingRegistrantsStatus(params: UpdateRegistrantStatusParams): Promise<string> {
     try {

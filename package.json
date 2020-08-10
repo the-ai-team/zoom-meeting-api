@@ -1,6 +1,6 @@
 {
   "name": "@0xait/zoom-meeting-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "API implementation for zoom meetings",
   "main": "index.js",
   "types": "index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"lib/**/*.js\" \"docs/**/*.html\" \"docs/**/*.css\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JSDoc: Source: functions/users.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css" />
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css" />
+  </head>
+
+  <body>
+    <div id="main">
+      <h1 class="page-title">Source: functions/users.js</h1>
+
+      <section>
+        <article>
+          <pre class="prettyprint source linenums"><code>'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.Users = void 0;
+const logger_1 = require('../utils/logger');
+/**
+ * Class to get list users
+ * Check user availability in the account
+ * Get, update, create, delete a user
+ */
+class Users {
+  /**
+   * Create a Users instance
+   * @param {AxiosInstance} http - axios instance to handle requests with zoom api
+   * @member getListUsers
+   * @member createUser
+   * @member getUser
+   * @member checkUserEmail
+   */
+  constructor(http) {
+    this.http = http;
+  }
+  /**
+   * @async
+   * Get List of users
+   * @param {GetUsersListParams} params
+   * @returns {Promise&lt;GetUsersListResponse>} - returns a list of users or throws an error
+   */
+  async getListUsers(params) {
+    try {
+      logger_1.logger().debug('Getting users list.', params);
+      const response = await this.http.get('/users', { params });
+      if (response.status === 200) {
+        logger_1.logger().info('Getting users list successful', response.data);
+        return response.data;
+      }
+      logger_1.logger().error('Unexpected behavior', response.data);
+      throw new Error('Unexpected behavior');
+    } catch (error) {
+      throw error;
+    }
+  }
+  /**
+   * @async
+   * Create a user
+   * @param {CreateUserParams} params
+   * @returns {Promise&lt;User>} - returns a user or throws an error
+   */
+  async createUser(params) {
+    try {
+      logger_1.logger().debug('Creating User', params);
+      const response = await this.http.post('/users', params);
+      if (response.status === 201) {
+        logger_1.logger().debug('Creating user successful', response.data);
+        return response.data;
+      }
+      if (response.status === 400) {
+        logger_1.logger().error('Creating user failed with an error code 400', response.data);
+        throw new Error('Creating user failed with an error code 400');
+      }
+      if (response.status === 404) {
+        logger_1.logger().error('Creating user failed with an error code 404', response.data);
+        throw new Error('Creating user failed with an error code 404');
+      }
+      if (response.status === 409) {
+        logger_1.logger().error('Creating user failed with an error code 409', response.data);
+        throw new Error('Creating user failed with an error code 409');
+      }
+      logger_1.logger().error('Unexpected bahavior', response.data);
+      throw new Error('Unexpected Behavior');
+    } catch (error) {
+      throw error;
+    }
+  }
+  /**
+   * @async
+   * get a user
+   * @param {string} userId
+   * @param {LoginTypes} loginType
+   * @returns {Promise&lt;User>} - returs a user object or throws an error
+   */
+  async getUser(userId, loginType) {
+    try {
+      logger_1.logger().debug('Getting a user', `UserId: ${userId}, login_type: ${loginType}`);
+      const response = await this.http.get(`/users/${userId}`, { params: { login_type: loginType } });
+      if (response.status === 200) {
+        logger_1.logger().info('Getting user successful', response.data);
+        return response.data;
+      }
+      if (response.status === 400) {
+        logger_1.logger().error('Getting user failed with an error code 400', response.data);
+        throw new Error('Getting user failed with an error code 400');
+      }
+      if (response.status === 404) {
+        logger_1.logger().error('Getting user failed with an error code 404', response.data);
+        throw new Error('Getting user failed with an error code 404');
+      }
+      logger_1.logger().error('Unexpected Behavior', response.data);
+      throw new Error('Unexpected Behavior');
+    } catch (error) {
+      throw error;
+    }
+  }
+  /**
+   * @async
+   * check whether the user email in the account or not
+   * @param {string} email
+   * @returns {Promise&lt;CheckEmail>} - returns an object with boolean or throws an error
+   */
+  async checkUserEmail(email) {
+    try {
+      logger_1.logger().debug('Checking a user email', email);
+      const response = await this.http.get('/users/email', { params: { email } });
+      if (response.status === 200) {
+        logger_1.logger().info('Checking email success', response.data);
+        return response.data;
+      }
+      if (response.status === 300) {
+        logger_1.logger().error('Checking email failed with an error code 300', response.data);
+        throw new Error('Checking email failed with an error code 300');
+      }
+      if (response.status === 400) {
+        logger_1.logger().error('Checking email failed with an error code 400', response.data);
+        throw new Error('Checking email failed with an error code 400');
+      }
+      if (response.status === 404) {
+        logger_1.logger().error('Checking email failed with an error code 404', response.data);
+        throw new Error('Checking email failed with an error code 404');
+      }
+      logger_1.logger().error('Unexpected behavior', response.data);
+      throw new Error('Unexpected behavior');
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+exports.Users = Users;
+</code></pre>
+        </article>
+      </section>
+    </div>
+
+    <nav>
+      <h2><a href="index.html">Home</a></h2>
+      <h3>Classes</h3>
+      <ul>
+        <li><a href="Meetings.html">Meetings</a></li>
+        <li><a href="Registrants.html">Registrants</a></li>
+        <li><a href="Users.html">Users</a></li>
+        <li><a href="ZoomMeetingAPI.html">ZoomMeetingAPI</a></li>
+      </ul>
+      <h3>Global</h3>
+      <ul>
+        <li><a href="global.html#checkUserEmail">checkUserEmail</a></li>
+        <li><a href="global.html#deleteMeeting">deleteMeeting</a></li>
+        <li><a href="global.html#updateMeetingRegistrantsStatus">updateMeetingRegistrantsStatus</a></li>
+      </ul>
+    </nav>
+
+    <br class="clear" />
+
+    <footer>
+      Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Mon Aug 10 2020 22:20:08
+      GMT+0530 (India Standard Time)
+    </footer>
+
+    <script>
+      prettyPrint();
+    </script>
+    <script src="scripts/linenumber.js"></script>
+  </body>
+</html>

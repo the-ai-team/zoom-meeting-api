@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { Meetings } from './functions/meetings';
 import { Registrants } from './functions/registrants';
 import { logger } from './utils/logger';
+import { Users } from './functions/users';
 
 /**
  * Zoom Meeting Api
@@ -15,20 +16,17 @@ export class ZoomMeetingAPI {
   /**
    * @member {Meetings} meetingFunctions - configuerd instance of meetingFunctions
    * @member {Registrants} registrantFunctions - configured instance of registrantFunctions
+   * @member {Users} usersFunctions - configured instance of usersFunctions
    */
   meetingFunctions: Meetings;
   registrantFunctions: Registrants;
+  usersFunctions: Users;
 
   /**
    * Create a zoom jwt app and get your credentials
    * @param {string} APISectret - zoom api secret
    * @param {string} apiKey - zoom api key
    * @param {number} logLevel - value should be from 0-4
-   *                        0 - no logs
-   *                        1 - errors only
-   *                        2 - warnings and errors only
-   *                        3 - warnings, errors and debug only
-   *                        4 - all logs
    */
   constructor(APISectret: string, apiKey: string, logLevel = 0) {
     this.zoomIss = apiKey;
@@ -36,6 +34,7 @@ export class ZoomMeetingAPI {
 
     this.meetingFunctions = new Meetings(this.http);
     this.registrantFunctions = new Registrants(this.http);
+    this.usersFunctions = new Users(this.http);
 
     logger().setLogLevel(logLevel);
   }

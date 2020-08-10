@@ -7,3 +7,7 @@ export * from './recurrence-types';
 export * from './weeks-of-month';
 export * from './registrant-status';
 export * from './updatable-registrant-statuses';
+export * from './user-type';
+export * from './user-verification-type';
+export * from './create-user-action';
+export * from './login-types';

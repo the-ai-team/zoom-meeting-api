@@ -19,15 +19,23 @@ export class Meetings {
   /**
    * Create a Meeting Instance
    * @param {AxiosInstance} http - axios instance to handle requests with zoom api
+   * @member getListMeetings
+   * @member createMeeting
+   * @member updateMeeting
+   * @member getMeeting
+   * @member updateMeeting
+   * @member updateMeetingStatus
+   * @member deleteMeeting
    */
   constructor(http: AxiosInstance) {
     this.http = http;
   }
 
   /**
-   * @async Get meeting list
+   * @async
+   * Get meeting list
    * @param {GetListMeetingsParams} params - parameters requires to get a list of meetings
-   * @return {Promise<GetListMeetingsResponse>} - returns a meeting list or throwes an error
+   * @returns {Promise<GetListMeetingsResponse>} - returns a meeting list or throwes an error
    */
   async getListMeetings(params: GetListMeetingsParams): Promise<GetListMeetingsResponse> {
     try {
@@ -64,9 +72,10 @@ export class Meetings {
   }
 
   /**
-   * @async Create meeting
+   * @async
+   * Create meeting
    * @param {CreateMeetingParams} params - params requires to create a meeting
-   * @returns {promise<CreateMeetingResponse>} - returns the created meeting object or throws an error
+   * @returnss {promise<CreateMeetingResponse>} - returns the created meeting object or throws an error
    */
   async createMeeting(params: CreateMeetingParams): Promise<CreateMeetingResponse> {
     try {
@@ -98,9 +107,10 @@ export class Meetings {
   }
 
   /**
-   * @async Get specific meeting
+   * @async
+   * Get specific meeting
    * @param {GetMeetingParams} params - params requires to get a meeting
-   * @returns {promise<GetMeetingResponse>} - returns the requested meeting or throws an error
+   * @returnss {promise<GetMeetingResponse>} - returns the requested meeting or throws an error
    */
   async getMeeting(params: GetMeetingParams): Promise<GetMeetingResponse> {
     try {
@@ -132,9 +142,10 @@ export class Meetings {
   }
 
   /**
-   * @async Update meeting
+   * @async
+   * Update meeting
    * @param {UpdateMeetingParams} params - params requires to update a meeting
-   * @returns {promise<string>} - returns a message of success or throws an error
+   * @returnss {promise<string>} - returns a message of success or throws an error
    */
   async updateMeeting(params: UpdateMeetingParams): Promise<string> {
     try {
@@ -174,10 +185,11 @@ export class Meetings {
   }
 
   /**
-   * @async Updates Meeting Status
+   * @async
+   * Updates Meeting Status
    * @param {number} meetingId - the meeting id of the meeting to be updated
    * @param {string} action - action of the meeting status
-   * @returns {promise<string>} - returns an success message or throws an error
+   * @returnss {promise<string>} - returns an success message or throws an error
    */
   async updateMeetingStatus(meetingId: number, action = 'end'): Promise<string> {
     try {
@@ -209,11 +221,12 @@ export class Meetings {
   }
 
   /**
-   * @async Delete a meeting
+   * @async
+   * Delete a meeting
    * @param {number} meetingId - the id of the meeting to be deleted
    * @param {string} occurrenceId
    * @param {boolean} scheduleForReminder
-   * @returns {promise<string>} - returns a success message or throws an error
+   * @returnss {promise<string>} - returns a success message or throws an error
    */
   async deleteMeeting(meetingId: number, occurrenceId?: string, scheduleForReminder?: boolean): Promise<string> {
     try {
