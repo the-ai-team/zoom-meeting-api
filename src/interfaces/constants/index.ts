@@ -11,3 +11,4 @@ export * from './user-type';
 export * from './user-verification-type';
 export * from './create-user-action';
 export * from './login-types';
+export * from './delete-user-actions';

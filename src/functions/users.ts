@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { GetUsersListParams, CreateUserParams } from '../interfaces/requests';
+import { GetUsersListParams, CreateUserParams, DeleteUserParams } from '../interfaces/requests';
 import { GetUsersListResponse, CheckEmail } from '../interfaces/responses';
 import { logger } from '../utils/logger';
 import { User } from '../interfaces/shared';
@@ -152,6 +152,39 @@ export class Users {
       }
 
       logger().error('Unexpected behavior', response.data);
+      throw new Error('Unexpected behavior');
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @async
+   * Delete zoom user
+   * @param {DeleteUserParams} params
+   * @returns {Promise<string>} - returns an success message or throws an error
+   */
+  async deleteUser(params: DeleteUserParams): Promise<string> {
+    try {
+      logger().debug('Deleting user', params);
+      const response = await this.http.delete<string>(`/users/${params.userId}`, { params: params.queryParams });
+
+      if (response.status === 204) {
+        logger().info('User deleted successfully', response.data);
+        return response.data;
+      }
+
+      if (response.status === 400) {
+        logger().info('User deletion faild with an error code 400', response.data);
+        throw new Error('User deletion faild with an error code 400');
+      }
+
+      if (response.status === 404) {
+        logger().info('User deletion faild with an error code 404', response.data);
+        throw new Error('User deletion faild with an error code 404');
+      }
+
+      logger().error('Unexpected behaviour', response.data);
       throw new Error('Unexpected behavior');
     } catch (error) {
       throw error;
