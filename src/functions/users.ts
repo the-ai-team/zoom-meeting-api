@@ -1,9 +1,14 @@
 import { AxiosInstance } from 'axios';
-import { GetUsersListParams, CreateUserParams, DeleteUserParams } from '../interfaces/requests';
-import { GetUsersListResponse, CheckEmail } from '../interfaces/responses';
+import {
+  GetUsersListParams,
+  CreateUserParams,
+  DeleteUserParams,
+  LoginTypes,
+  GetUsersListResponse,
+  CheckEmail,
+  User,
+} from '../interfaces';
 import { logger } from '../utils/logger';
-import { User } from '../interfaces/shared';
-import { LoginTypes } from '../interfaces/constants';
 
 /**
  * Class to get list users

@@ -1,6 +1,6 @@
 {
   "name": "@0xait/zoom-meeting-api",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "API implementation for zoom meetings",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,8 +15,7 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags",
-    "publish": "npm publish --access=public"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",

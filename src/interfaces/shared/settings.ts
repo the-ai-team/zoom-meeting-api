@@ -18,4 +18,6 @@ export interface MeetingSettings {
   alternative_hosts?: string;
   global_dial_in_countries?: string[];
   registrants_email_notification?: boolean;
+  meeting_authentication?: boolean;
+  waiting_room?: boolean;
 }

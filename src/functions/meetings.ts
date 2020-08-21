@@ -4,10 +4,11 @@ import {
   GetListMeetingsParams,
   GetMeetingParams,
   UpdateMeetingParams,
-} from '../interfaces/requests';
-import { CreateMeetingResponse, GetListMeetingsResponse } from '../interfaces/responses';
-import { GetMeetingTypes } from '../interfaces/constants';
-import { GetMeetingResponse } from '../interfaces/responses/get-meeting';
+  CreateMeetingResponse,
+  GetListMeetingsResponse,
+  GetMeetingTypes,
+  GetMeetingResponse,
+} from '../interfaces';
 import { logger } from '../utils/logger';
 
 /**

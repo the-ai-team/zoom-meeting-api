@@ -3,8 +3,9 @@ import {
   GetListMeetingRegistrantsParams,
   AddMeetingRegistratParams,
   UpdateRegistrantStatusParams,
-} from '../interfaces/requests';
-import { GetMeetingRegistrantListResponse, AddMeetingRegistrantResponse } from '../interfaces/responses';
+  GetMeetingRegistrantListResponse,
+  AddMeetingRegistrantResponse,
+} from '../interfaces';
 import { logger } from '../utils/logger';
 
 /**
